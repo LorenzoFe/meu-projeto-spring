@@ -11,7 +11,7 @@ import java.util.Objects;
 
 @Getter @Setter @NoArgsConstructor
 @Entity
-@Table(name = "usuraiors")
+@Table(name = "usuarios")
 public class Usuario implements Serializable {
 
     @Id
@@ -22,7 +22,7 @@ public class Usuario implements Serializable {
     @Column(name = "username", nullable = false, unique = true, length = 100)
     private String username;
 
-    @Column(name = "username", nullable = false, length = 200)
+    @Column(name = "password", nullable = false, length = 200)
     private String password;
 
     @Enumerated(EnumType.STRING)
