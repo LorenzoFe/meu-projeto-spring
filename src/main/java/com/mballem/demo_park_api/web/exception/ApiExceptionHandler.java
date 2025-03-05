@@ -1,6 +1,7 @@
 package com.mballem.demo_park_api.web.exception;
 
 
+import com.mballem.demo_park_api.exception.ConfirmacaoException;
 import com.mballem.demo_park_api.exception.EntityNotFoundException;
 import com.mballem.demo_park_api.exception.UsernameUniqueViolationException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -54,6 +55,17 @@ public class ApiExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, ex.getMessage() ));
+
+    }
+
+    @ExceptionHandler(ConfirmacaoException.class)
+    public ResponseEntity<ErrorMessage> ConfirmacaoException(RuntimeException ex,
+                                                                HttpServletRequest request){
+        log.error("Api Error - ", ex);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage() ));
 
     }
 }
