@@ -62,15 +62,18 @@ public class UsuarioController {
 
     }
 
-    @Operation(summary = "Recuperar um usuario pelo ID", description = "Recuperar um usuario pelo ID",
+    @Operation(summary = "Atualizar senha", description = "Atualizar senha",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Recurso recuperado com sucesso",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
+                    @ApiResponse(responseCode = "204", description = "Senha atualizada com sucesso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = void.class))),
+                    @ApiResponse(responseCode = "400", description = "Senha não confere",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class ))),
                     @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class )))
             }
 
     )
+
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updatePassword(@PathVariable Long id, @Valid @RequestBody UsuarioSenhaDto dto){
@@ -78,6 +81,14 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
 
     }
+
+    @Operation(summary = "Listar todos os Usuários", description = "Listar todos os Usuários",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Todos os Usuários",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class)))
+            }
+    )
+
 
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDto>> getAll(){
