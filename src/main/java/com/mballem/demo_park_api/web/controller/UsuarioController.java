@@ -1,6 +1,7 @@
 package com.mballem.demo_park_api.web.controller;
 
 import com.mballem.demo_park_api.entity.Usuario;
+import com.mballem.demo_park_api.exception.ConfirmacaoException;
 import com.mballem.demo_park_api.service.UsuarioService;
 import com.mballem.demo_park_api.web.dto.UsuarioCreateDto;
 import com.mballem.demo_park_api.web.dto.UsuarioResponseDto;
@@ -69,6 +70,8 @@ public class UsuarioController {
                     @ApiResponse(responseCode = "400", description = "Senha não confere",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class ))),
                     @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class ))),
+                    @ApiResponse(responseCode = "422", description = "Campos invalidos ou mal formatados.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class )))
             }
 
@@ -77,8 +80,13 @@ public class UsuarioController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updatePassword(@PathVariable Long id, @Valid @RequestBody UsuarioSenhaDto dto){
-        Usuario user = usuarioService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
-        return ResponseEntity.noContent().build();
+        try{
+            usuarioService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
+            return ResponseEntity.noContent().build();
+        } catch (ConfirmacaoException e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
 
     }
 
